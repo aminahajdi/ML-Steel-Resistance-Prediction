@@ -1,49 +1,56 @@
-# Study 3 — Experimental CWC: MLJAR AutoML
+# Study 4 — Welded Joints: Fixed DNN
 
-This directory contains the MLJAR AutoML implementation used to develop and assess regression models for experimental column-web transverse-compression resistance in *A Systematic Framework for Machine Learning-Based Structural Resistance Prediction*.
+This directory contains a fixed deep neural network (DNN) implementation for predicting welded-joint moment resistance, as part of *A Systematic Framework for Machine Learning-Based Structural Resistance Prediction*. The network configuration was selected in a preceding Optuna-based model-development experiment; this script evaluates that fixed configuration and does not rerun hyperparameter optimization.
 
 ## Dataset
 
-The experimental CWC modelling dataset is **not publicly distributed** with this repository. Users with authorized access should place the prepared dataset at `data/study_03_data.xlsx` in the repository root.
+Place the Study 4 database at `data/study_04_data.xlsx` in the repository root. The 15 required input variables are `hc`, `bc`, `twc`, `tfc`, `rc`, `hb1`, `bb1`, `twb1`, `tfb1`, `rb1`, `axial force percentage`, `stiffening`, `joint location`, `moment ratio`, and `fy`. The prediction target is `moment resistance`.
 
-The script requires eight input columns: `h_c`, `t_wc`, `b_fc`, `t_fc`, `r_c`, `t_fb`, `N/Npl`, and `f_y`, and the target `F_exp`.
-
-The modelling dataset was prepared by excluding an influential observation prior to model development. The script subsequently removes rows containing missing or nonfinite required values and observations with nonpositive `F_exp`. No additional outlier removal is performed.
+Rows with missing values in these required columns are excluded. The optional sequential histogram-based tail filtering is **disabled** in this experiment (`USE_DATA_FILTERING = False`). No additional dataset filtering is applied by default. The code expects numerical input columns.
 
 ## Model development
 
-An 80/20 training/test partition is generated using seed **7**. MLJAR AutoML uses **Compete** mode, a **3,600-second** total search budget, **five-fold cross-validation**, and **RMSE** as its evaluation metric. All available CPU threads are permitted.
+An 80/20 training/test partition is generated with seed **42**. Five-fold cross-validation is performed within the training partition. Input standardization and target scaling are fitted using each fold's training data only. The DNN is trained with mean squared relative error, and the lowest validation resistance-ratio CoV selects the epoch for each fold. The final network is retrained on the complete training partition for the rounded mean of the selected epochs, subject to the minimum epoch count.
 
-The search includes linear models, random forests, extra trees, LightGBM, XGBoost, CatBoost, and neural networks. Feature selection, ensembling, and model stacking are enabled; golden-feature generation is disabled. MLJAR's explainability level is set to 2.
+| Parameter | Value |
+|---|---|
+| Architecture | 64–32–16 |
+| Activation | GELU |
+| Optimizer | AdamW |
+| Learning rate | 0.005 |
+| Weight decay | 0 |
+| Training/test partition | 80/20 |
+| Cross-validation | 5 folds |
+| Minimum / maximum training epochs per fold | 300 / 5,000 |
+| Validation evaluation interval | 25 epochs, starting at epoch 100 |
+| Early-stopping patience | 500 epochs |
 
-The script calculates training/test bias and CoV from predicted-to-experimental resistance ratios, together with R², RMSE, and MAE. MLJAR model development is guided by RMSE rather than resistance-ratio CoV. The 20% test subset is not passed to `AutoML.fit()` and is reserved for evaluation after fitting.
+Evaluation metrics comprise bias and CoV of predicted-to-reference resistance ratios, R², RMSE, and MAE. Results are calculated for the training, independent test, and combined datasets. Combined-dataset scores include training observations and are not independent test metrics.
 
 ## Execution
 
-Install `mljar-supervised`, `openpyxl`, and the scientific Python dependencies specified in the root requirements file. Additional environment requirements depend on the installed MLJAR version and its supported estimators.
-
-Run from the repository root:
+Install the dependencies listed in the repository's root requirements file. From the repository root, run:
 
 ```bash
-python 03_Experimental_CWC/02_AutoML/03_MLJAR/MLJAR.py
+python 04_Welded_Joints/02_Conventional_DNN/fixed_DNN.py
 ```
 
 ## Outputs
 
-Files are written to `03_Experimental_CWC/02_AutoML/03_MLJAR/outputs/seed_7/`:
+Outputs are created in `04_Welded_Joints/02_Conventional_DNN/outputs/`.
 
 | File | Contents |
 |---|---|
-| `mljar_best_model_metrics_seed7.csv` | Train/test bias, CoV, R², RMSE, and MAE |
-| `mljar_predictions_seed7.csv` | Observed and predicted resistance, dataset split, and prediction ratio |
-| `mljar_true_vs_predicted_seed7.png` | Resistance prediction comparison |
-| `mljar_leaderboard_seed7.csv` | Model leaderboard, if direct export is supported by the installed MLJAR version |
-| `MLJARModels/` | Automatically generated models, reports, and supporting files |
+| `fixed_dnn_5fold_cv_results.csv` | Per-fold validation metrics and selected epochs |
+| `fixed_dnn_metrics.txt` | Model configuration, cross-validation summary, and evaluation metrics |
+| `fixed_dnn_predictions.csv` | Individual input records, predicted moment resistance, and prediction-to-reference ratios |
+| `fixed_dnn_all_data_test_plot.png` | Predictions compared against reference values; test observations highlighted |
+| `fixed_dnn_training_loss.png` | Final-network training loss |
+| `fixed_dnn_model_state_dict.pt` | Trained PyTorch model weights and metadata |
+| `fixed_dnn_input_scaler.pkl` | Fitted input standardizer |
 
-The direct leaderboard export is optional: the script attempts `automl.get_leaderboard()` and reports an exception if that method is unavailable. MLJAR also generates reports within `MLJARModels/`.
-
-**Generated outputs, trained models, and individual experimental predictions are not distributed publicly** because the underlying experimental database is restricted. These files are excluded from version control.
+`fixed_dnn_predictions.csv`, the trained weights, and the fitted scaler should not be uploaded to a public repository without considering any applicable dataset-sharing restrictions.
 
 ## Reproducibility
 
-Time-bounded AutoML searches may vary across computational environments. Reproducing the analysis requires authorized access to the experimental dataset and compatible Python, MLJAR, and dependency versions. Computational resources and software versions should be documented when repeating the experiment.
+The script provides the fixed model configuration, random seed, data partition, five-fold evaluation, and final training procedure. Numerical reproduction requires the original Study 4 database and compatible software versions.
