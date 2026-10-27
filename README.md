@@ -1,116 +1,104 @@
 # Machine Learning for Steel Structural Resistance Prediction
 
-Research code accompanying *A Systematic Framework for Machine Learning-Based Structural Resistance Prediction*.
+Research code developed for *A Systematic Framework for Machine Learning-Based Structural Resistance Prediction* (manuscript in preparation).
 
-This repository documents data preparation, model development, validation, sensitivity analyses, and interpretation across **four benchmark studies** involving steel structural resistance. The studies are intended to illustrate a systematic machine-learning (ML) workflow for engineering applications. Each study has its own README with the experiment-specific methods, inputs, and outputs.
+This repository contains Python implementations for four benchmark studies investigating machine learning (ML) for steel structural resistance prediction. The analyses cover database assessment, preprocessing, model development, validation, engineering interpretation, and applicability assessment.
 
-## Repository contents
+## Benchmark studies
 
-| Directory | Benchmark | Included analyses |
+| Study | Benchmark database | Main analyses |
 |---|---|---|
-| `01_IDEA_CWC/` | IDEA StatiCa numerical database for column web in transverse compression (CWC) | Data generation; conventional DNN, Random Forest and XGBoost model development; training-dataset-size sensitivity |
-| `02_Analytical_CWC/` | Analytical CWC resistance database | Data generation; database diagnostics; preprocessing; Optuna-based hyperparameter optimization and SHAP; dataset-size and validation sensitivity |
-| `03_Experimental_CWC/` | Experimental CWC resistance database | Database diagnostics; AutoGluon, H2O AutoML and MLJAR; random-seed sensitivity; Golden Features; separate yielding/buckling analyses |
-| `04_Welded_Joints/` | Welded steel-joint moment-resistance database | Database diagnostics; fixed DNN; AutoGluon, H2O AutoML and MLJAR; output-scaling comparison; dataset-size and validation sensitivity; feature ablation; SHAP explanations |
-| `data/` | Input-data location | Dataset access and file-naming instructions; see `data/README.md` |
+| **1 — IDEA StatiCa CWC** | Numerical simulations of column web in transverse compression | Data generation, conventional DNN/RF/XGBoost development, database diagnostics, dataset-size sensitivity |
+| **2 — Analytical CWC** | EN 1993-1-8 resistance calculations | Data generation, preprocessing, Optuna-based model and hyperparameter optimisation, validation sensitivity, SHAP |
+| **3 — Experimental CWC** | Experimental column-web transverse-compression resistance | AutoML comparison, repeated-split analysis, feature engineering, SHAP, yielding- and buckling-specific analyses |
+| **4 — Welded joints** | Nonlinear finite-element simulations of welded beam-to-column joints | Fixed DNN, AutoML comparison, preprocessing, dataset-size and validation sensitivity, SHAP, feature ablation |
 
-The terms **conventional development**, **hyperparameter optimization**, and **AutoML** describe different workflows in this repository. Study 1 uses explicitly defined model configurations and manual sensitivity searches; Study 2 uses Optuna to optimize specified model families; Studies 3 and 4 also investigate automated ML platforms. Optuna optimization should not be confused with a standalone AutoML platform.
+The studies investigate three levels of ML development: conventional model development, automated model-family and hyperparameter optimisation using Optuna, and full AutoML using AutoGluon, H2O AutoML, and MLJAR.
 
-## Folder organization
+## Repository structure
 
 ```text
 ML-Steel-Resistance-Prediction/
-├── README.md
-├── requirements.txt
-├── .gitignore
-├── data/
-│   └── README.md
 ├── 01_IDEA_CWC/
 │   ├── 01_Data_Generation/
 │   ├── 02_Conventional_Model_Development/
-│   │   ├── 01_DNN/
-│   │   ├── 02_Random_Forest/
-│   │   └── 03_XGBoost/
-│   └── 03_Dataset_Size_Sensitivity/
+│   ├── 03_Dataset_Size_Sensitivity/
+│   └── 04_Database_Analysis/
 ├── 02_Analytical_CWC/
 │   ├── 01_Data_Generation/
 │   ├── 02_Database_Analysis/
 │   ├── 03_Preprocessing/
 │   ├── 04_Optuna/
 │   ├── 05_Dataset_Size/
-│   └── 06_Validation_Sensitivity/
+│   └── 06_Validation_sensitivity/
 ├── 03_Experimental_CWC/
 │   ├── 01_Database_Analysis/
 │   ├── 02_AutoML/
 │   ├── 03_Seed_Sensitivity/
 │   ├── 04_Feature_Engineering/
 │   └── 05_Yielding_vs_Buckling/
-└── 04_Welded_Joints/
-    ├── 01_Database_Analysis/
-    ├── 02_Fixed_DNN/
-    ├── 03_AutoML/
-    ├── 04_Preprocessing/
-    ├── 05_Dataset_Size/
-    ├── 06_Validation_Sensitivity/
-    ├── 07_Ablation_Study/
-    └── 08_Explainability/
+├── 04_Welded_Joints/
+│   ├── 01_Database_Analysis/
+│   ├── 02_Conventional_DNN/
+│   ├── 03_AutoML/
+│   ├── 04_Preprocessing/
+│   ├── 05_Dataset_Size/
+│   ├── 06_Validation_Sensitivity/
+│   ├── 07_Ablation_Study/
+│   └── 08_Explainability/
+├── data/
+│   └── README.md
+├── requirements.txt
+└── README.md
 ```
 
-Some individual analyses contain their own `outputs/` and/or `reference_results/` folders. The former is used for files created by running scripts; the latter, where included, contains selected archived aggregate reference results. Additional subdirectories and precise script names are documented in the individual study READMEs.
+Individual directories contain the corresponding scripts, methodological details, and available reference results.
 
-## Getting started
+## Installation and execution
 
-1. Clone or download this repository and open a terminal in its root directory.
-2. Create a virtual environment and install the dependencies:
+Clone the repository and install the required Python dependencies:
 
-   ```bash
-   python -m venv .venv
-   # Windows PowerShell:
-   .\.venv\Scripts\Activate.ps1
-   # macOS / Linux:
-   # source .venv/bin/activate
-   python -m pip install -r requirements.txt
-   ```
+```bash
+git clone https://github.com/aminahajdi/ML-Steel-Resistance-Prediction.git
+cd ML-Steel-Resistance-Prediction
+pip install -r requirements.txt
+```
 
-3. Obtain the datasets you are **authorized to access** and put them in `data/` under the filenames listed below. The database for the experimental CWC study is not distributed publicly with these scripts.
-4. Run a script from the repository root. For example:
+The repository uses PyTorch, scikit-learn, Optuna, XGBoost, SHAP, and AutoML frameworks, among other libraries. Some frameworks may require separate environments depending on version compatibility.
 
-   ```bash
-   python 01_IDEA_CWC/02_Conventional_Model_Development/01_DNN/final_dnn.py
-   python 01_IDEA_CWC/02_Conventional_Model_Development/02_Random_Forest/random_forest_grid_search.py
-   python 01_IDEA_CWC/02_Conventional_Model_Development/03_XGBoost/xgboost_grid_search.py
-   python 01_IDEA_CWC/03_Dataset_Size_Sensitivity/dataset_size_sensitivity.py
-   ```
+Place the required datasets in the `data/` directory:
 
-For the other three studies, consult the README inside the relevant analysis directory for its exact entry point and run order. **Do not run every script automatically**: several analyses are computationally intensive and some require intermediates or models generated by earlier scripts. In particular, fixed-DNN SHAP scripts require a compatible saved model and input scaler.
+| Study | Dataset location |
+|---|---|
+| 1 — IDEA StatiCa CWC | `data/study_01_data.xlsx` |
+| 2 — Analytical CWC | `data/study_02_data.xlsx` |
+| 3 — Experimental CWC | `data/study_03_data.xlsx` |
+| 4 — Welded joints | `data/study_04_data.xlsx` |
 
-### Required dataset locations
+Data-generation scripts and supporting inputs are provided where applicable. The experimental CWC dataset is not publicly distributed. See `data/README.md` for further information on dataset requirements and availability.
 
-| Study | Expected input file | Access notes |
-|---|---|---|
-| 1 — Numerical CWC | `data/study_01_data.xlsx` | Numerical database; check the accompanying publication or authorized research-data deposit for availability |
-| 2 — Analytical CWC | `data/study_02_data.xlsx` | May be generated by the supplied analytical data-generation scripts; their input workbook is described in the Study 2 README |
-| 3 — Experimental CWC | `data/study_03_data.xlsx` | Individual experimental measurements are not included in the public repository; access must be authorized |
-| 4 — Welded joints | `data/study_04_data.xlsx` | Dataset-sharing terms must be checked before redistribution |
-
-Preserve the expected column names, units, and observation order. Row order can affect train/test partitioning and downstream results. See `data/README.md` and each study-specific README for details.
-
-## Dependencies and computational environment
-
-The root `requirements.txt` lists the principal Python libraries used across the four studies, including PyTorch, scikit-learn, XGBoost, Optuna, SHAP, and the AutoML frameworks. **The full installation may be heavy and version compatibility can depend on the Python environment**, especially for AutoGluon, H2O, and MLJAR. If needed, install only the dependencies required for the particular analysis and use separate virtual environments for incompatible AutoML frameworks.
-
-Scripts may use CPU or CUDA depending on availability. Compute time and small numerical differences can vary with hardware, package versions, threading, and framework versions. The dependency list is not a claim of a single fully tested, locked environment.
+Run the analysis scripts from the repository root, following the instructions in the relevant study-level README.
 
 ## Methodology and evaluation
 
-The benchmark scripts include, as appropriate, data-domain diagnostics, filtering and preprocessing, training/test separation, cross-validation, hyperparameter search, final model evaluation, sensitivity checks, and engineering interpretation. Common metrics include the prediction/reference ratio bias, its coefficient of variation (CoV), and the coefficient of determination (R²). Certain AutoML studies additionally report RMSE and MAE.
+The analyses follow the five-stage ML development framework investigated in the manuscript: database assessment and preprocessing, model development and optimisation, validation, engineering interpretation, and applicability assessment.
 
-**Not every script uses the same evaluation protocol.** For example, some sensitivity scripts use a separate 70/15/15 training/validation/test split, whereas final model searches commonly use an 80/20 split with cross-validation inside the training portion. Some archived analyses monitor test performance during training or use a test partition for model ranking; these methodological limitations are identified in the corresponding study documentation and should be considered when interpreting reported test statistics. Readers should consult individual READMEs rather than assuming every test result is equally independent.
+The principal benchmark evaluation protocol uses an 80/20 training/test split, with five-fold cross-validation within the training data for model selection. Performance is assessed primarily through prediction-to-reference resistance ratios (bias and coefficient of variation, CoV) and the coefficient of determination (R²).
 
-## Outputs, data access, and reproducibility
+Additional sensitivity analyses investigate database size, preprocessing, validation settings, model stability, and feature relevance. Study-specific configurations and evaluation procedures are documented in the corresponding directories.
 
-All scripts are provided for methodological transparency. Subject to the relevant access rights and dependencies, numerical results can be regenerated by executing the scripts with the corresponding source databases. **The availability of code does not imply public availability of every dataset or complete numerical reproducibility without it.**
+## Data availability and reproducibility
 
-Generated outputs may include performance CSVs, text summaries, predictions, model checkpoints, input scalers, feature importance, and diagnostic figures. Individual-record outputs should not be committed where source data are confidential or redistribution is restricted. The root `.gitignore` excludes raw input data and generated analysis folders by default; selected non-sensitive reference results can be committed in explicitly named `reference_results/` directories.
+The repository provides analysis scripts and selected reference results generated during the research.
 
-The repository should be cited alongside the accompanying journal paper. A permanent repository release, software version information, and a data DOI can be added when available.
+Reproducing individual analyses requires the corresponding databases and compatible software dependencies. Numerical results from stochastic training and time-limited optimisation may vary with random seeds, software versions, and computational resources.
+
+Experimental data and other datasets subject to access restrictions are not redistributed in this repository.
+
+## Citation
+
+This repository was developed in connection with the manuscript:
+
+Hajdarević, A., Ljubinković, F., Vild, M., and Simões da Silva, L. *A Systematic Framework for Machine Learning-Based Structural Resistance Prediction* (manuscript in preparation).
+
+Publication details will be added when available.
