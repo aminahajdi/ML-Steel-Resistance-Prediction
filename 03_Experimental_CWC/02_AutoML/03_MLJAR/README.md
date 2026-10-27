@@ -4,7 +4,9 @@ This directory contains the MLJAR AutoML implementation used to develop and asse
 
 ## Dataset
 
-Download the experimental CWC dataset from the accompanying research-data repository and place it at `data/study_03_data.xlsx` in the repository root. The script requires eight input columns: `h_c`, `t_wc`, `b_fc`, `t_fc`, `r_c`, `t_fb`, `N/Npl`, `f_y`, and the target `F_exp`.
+The experimental CWC modelling dataset is **not publicly distributed** with this repository. Users with authorized access should place the prepared dataset at `data/study_03_data.xlsx` in the repository root.
+
+The script requires eight input columns: `h_c`, `t_wc`, `b_fc`, `t_fc`, `r_c`, `t_fb`, `N/Npl`, and `f_y`, and the target `F_exp`.
 
 The modelling dataset was prepared by excluding an influential observation prior to model development. The script subsequently removes rows containing missing or nonfinite required values and observations with nonpositive `F_exp`. No additional outlier removal is performed.
 
@@ -23,21 +25,25 @@ Install `mljar-supervised`, `openpyxl`, and the scientific Python dependencies s
 Run from the repository root:
 
 ```bash
-python 03_Experimental_CWC/02_AutoML/MLJAR/mljar_benchmark.py
+python 03_Experimental_CWC/02_AutoML/03_MLJAR/MLJAR.py
 ```
 
 ## Outputs
 
-Files are written to `03_Experimental_CWC/02_AutoML/MLJAR/outputs/seed_7/`:
+Files are written to `03_Experimental_CWC/02_AutoML/03_MLJAR/outputs/seed_7/`:
 
 | File | Contents |
 |---|---|
-| `mljar_best_model_metrics_seed7.csv` | Train/test bias, CoV, R², RMSE, MAE |
+| `mljar_best_model_metrics_seed7.csv` | Train/test bias, CoV, R², RMSE, and MAE |
 | `mljar_predictions_seed7.csv` | Observed and predicted resistance, dataset split, and prediction ratio |
 | `mljar_true_vs_predicted_seed7.png` | Resistance prediction comparison |
 | `mljar_leaderboard_seed7.csv` | Model leaderboard, if direct export is supported by the installed MLJAR version |
-| `MLJARModels/` | Automatically generated models, reports, and supporting files (may be large) |
+| `MLJARModels/` | Automatically generated models, reports, and supporting files |
 
 The direct leaderboard export is optional: the script attempts `automl.get_leaderboard()` and reports an exception if that method is unavailable. MLJAR also generates reports within `MLJARModels/`.
 
-Time-bounded AutoML searches may vary across environments. For reproducibility, record the Python and MLJAR versions, dependencies, and computational resources, and compare new runs against the reported reference outputs.
+**Generated outputs, trained models, and individual experimental predictions are not distributed publicly** because the underlying experimental database is restricted. These files are excluded from version control.
+
+## Reproducibility
+
+Time-bounded AutoML searches may vary across computational environments. Reproducing the analysis requires authorized access to the experimental dataset and compatible Python, MLJAR, and dependency versions. Computational resources and software versions should be documented when repeating the experiment.

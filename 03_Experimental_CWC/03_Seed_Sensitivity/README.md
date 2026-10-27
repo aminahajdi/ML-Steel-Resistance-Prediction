@@ -4,7 +4,7 @@ This directory contains the fixed-DNN seed-sensitivity analysis and SHAP interpr
 
 ## Dataset
 
-Download the prepared experimental CWC modelling dataset from the accompanying research-data repository and place it at `data/study_03_data.xlsx` in the repository root. The influential observation was excluded during database preparation, before these analyses. Both scripts remove missing or nonfinite required values and require positive `F_exp`.
+The experimental CWC modelling dataset is not publicly distributed with this repository. Users with authorized access should place the prepared dataset at `data/study_03_data.xlsx` in the repository root. The influential observation was excluded during database preparation, before these analyses. Both scripts remove missing or nonfinite required values and require positive `F_exp`.
 
 **Seven input features** are used in this experiment: `h_c`, `t_wc`, `b_fc`, `r_c`, `t_fb`, `N/Npl`, and `f_y`; the target is `F_exp`. In contrast to the eight-input AutoML benchmarks, `t_fc` is intentionally **not included** in this DNN configuration. The SHAP script uses the same seven inputs as the trained model.
 
