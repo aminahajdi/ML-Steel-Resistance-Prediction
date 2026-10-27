@@ -1,0 +1,19 @@
+BEST AUTOML PARAMETERS
+======================
+
+Selection rule: lowest mean CV CoV first, highest mean CV R² second.
+
+Selected trial = 100
+Selected model = DNN
+Mean CV CoV = 0.016658
+Mean CV R² = 0.999637
+Mean CV bias = 0.999975
+
+Input columns:
+['h_c', 't_wc', 'b_fc', 't_fc', 'r_c', 't_fb', 'N/Npl', 'f_y']
+
+Output column:
+F_c_wc_Rd_kN
+
+Best parameters:
+{'model_type': 'DNN', 'architecture': '(128, 64, 32)', 'learning_rate': 0.0005, 'activation': 'ReLU', 'optimizer': 'Adam', 'weight_decay': 0.0}

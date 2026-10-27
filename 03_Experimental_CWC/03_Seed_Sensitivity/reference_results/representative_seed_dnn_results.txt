@@ -1,0 +1,31 @@
+FIXED BEST DNN MULTI-SEED RESULTS FOR EXPERIMENTAL CWC DATABASE
+===============================================================
+
+Methodology:
+- 80:20 train/test split repeated across multiple random seeds
+- 5-fold CV inside the training pool for each seed
+- final test set evaluated once per seed
+- reported performance should be mean ± std across seeds
+
+Seeds = [1, 7, 21, 42, 100]
+Representative seed = 7
+
+Fixed hyperparameters:
+Architecture = (16, 8)
+Learning rate = 0.001
+Activation = GELU
+Optimizer = AdamW
+Weight decay = 0.0
+Dropout = 0.05
+Batch size = 4
+Loss = relative_mse
+
+Multi-seed summary:
+bias: train = 0.985098 ± 0.008776, test = 0.962974 ± 0.034178
+cov: train = 0.093388 ± 0.013485, test = 0.201934 ± 0.053711
+r2: train = 0.940296 ± 0.025953, test = 0.733490 ± 0.134111
+rmse: train = 71.285458 ± 12.966963, test = 137.474785 ± 42.809356
+mae: train = 42.306246 ± 5.672915, test = 85.360685 ± 20.591514
+
+Best seed by test R², for reference only:
+Seed 7: Test R²=0.910764, Test CoV=0.148012, Test bias=1.004016

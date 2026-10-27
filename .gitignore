@@ -1,0 +1,33 @@
+# Local research datasets
+/data/*.xlsx
+/data/*.xls
+/data/*.csv
+
+# Generated outputs (including AutoML training artifacts)
+**/outputs/**
+**/MLJARModels/**
+**/MLJAR_Golden_Features_results/**
+**/AutoGluonModels/**
+**/H2OAutoML/**
+
+# Model checkpoints and fitted preprocessors
+*.pkl
+*.pickle
+*.joblib
+*.pt
+*.pth
+*.lightgbm
+*.cbm
+
+# Python environments and temporary files
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Editors and operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

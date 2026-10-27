@@ -1,0 +1,19 @@
+BEST AUTOML PARAMETERS
+======================
+
+Selection rule: lowest mean CV CoV first, highest mean CV R² second.
+
+Selected trial = 26
+Selected model = LightGBM
+Mean CV CoV = 0.019786
+Mean CV R² = 0.999163
+Mean CV bias = 1.001207
+
+Input columns:
+['h_c', 't_wc', 'b_fc', 't_fc', 'r_c', 't_fb', 'N/Npl', 'f_y']
+
+Output column:
+F_c_wc_Rd_kN
+
+Best parameters:
+{'model_type': 'LightGBM', 'lgbm_n_estimators': 500, 'lgbm_num_leaves': 63, 'lgbm_learning_rate': 0.1, 'lgbm_subsample': 0.8, 'lgbm_colsample': 0.6}

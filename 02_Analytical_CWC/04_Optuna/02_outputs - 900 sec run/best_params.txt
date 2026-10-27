@@ -1,0 +1,19 @@
+BEST AUTOML PARAMETERS
+======================
+
+Selection rule: lowest mean CV CoV first, highest mean CV R² second.
+
+Selected trial = 59
+Selected model = GradientBoosting
+Mean CV CoV = 0.018648
+Mean CV R² = 0.999089
+Mean CV bias = 1.000981
+
+Input columns:
+['h_c', 't_wc', 'b_fc', 't_fc', 'r_c', 't_fb', 'N/Npl', 'f_y']
+
+Output column:
+F_c_wc_Rd_kN
+
+Best parameters:
+{'model_type': 'GradientBoosting', 'gbr_n_estimators': 300, 'gbr_learning_rate': 0.1, 'gbr_max_depth': 8, 'gbr_subsample': 0.85}

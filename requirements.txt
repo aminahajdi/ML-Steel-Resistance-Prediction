@@ -1,0 +1,28 @@
+# ML-Steel-Resistance-Prediction — principal Python dependencies
+# Install from the repository root: python -m pip install -r requirements.txt
+# Version compatibility has not been verified for every combination.
+# AutoML frameworks may require separate Python virtual environments.
+
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+scikit-learn
+openpyxl
+joblib
+
+# Neural networks and conventional ML
+torch
+xgboost
+lightgbm
+catboost
+
+# Hyperparameter optimization and explainability
+optuna
+shap
+
+# Automated machine-learning frameworks
+autogluon.tabular
+h2o
+mljar-supervised
