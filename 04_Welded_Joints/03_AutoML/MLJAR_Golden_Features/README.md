@@ -21,7 +21,7 @@ The training and test predictions are evaluated using bias and coefficient of va
 Install `mljar-supervised`, `openpyxl`, and the scientific Python dependencies specified in the repository's root requirements file. From the repository root, run:
 
 ```bash
-python 04_Welded_Joints/03_AutoML/MLJAR/mljar_golden_features.py
+python 04_Welded_Joints/03_AutoML/MLJAR_Golden_Features/mljar_golden_features.py
 ```
 
 ## Outputs
