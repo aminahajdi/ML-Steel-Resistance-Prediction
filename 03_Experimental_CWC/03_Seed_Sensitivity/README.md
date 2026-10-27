@@ -45,7 +45,7 @@ New runs save results in `03_Experimental_CWC/03_Seed_Sensitivity/outputs/`:
 | `SHAP_results/representative_seed_dnn_shap_beeswarm.png` | SHAP distribution plot |
 | `SHAP_results/representative_seed_dnn_shap_bar.png` | Mean absolute SHAP importance |
 
-`reference_results/` contains the supplied historical results, trained checkpoint, scaler files, and figures. The SHAP script uses a new checkpoint from `outputs/` when available and otherwise falls back to the provided reference checkpoint. Load checkpoint and pickle files only from trusted sources.
+`reference_results/` contains selected aggregate performance results and diagnostic figures. Trained model checkpoints, fitted scalers, and individual experimental predictions are not publicly distributed. The SHAP script requires a checkpoint and input scaler generated locally by `seed_sensitivity.py`. Load checkpoint and pickle files only from trusted sources.
 
 ## Reproducibility
 
